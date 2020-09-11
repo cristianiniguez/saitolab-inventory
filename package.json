@@ -1,8 +1,8 @@
 {
-  "name": "my-app",
-  "productName": "my-app",
+  "name": "saitolab-inventory",
+  "productName": "saitolab-inventory",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "inventory management system with electron and mysql",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -11,7 +11,13 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": [],
+  "keywords": [
+    "inventory",
+    "mysql",
+    "javascript",
+    "node",
+    "electron"
+  ],
   "author": {
     "name": "cristianiniguez",
     "email": "felizpc1@gmail.com"
