@@ -1,14 +1,18 @@
-const { selectProducts } = require('../../database/product-queries')
+const { selectProducts, insertProduct } = require('../../database/product-queries')
+
+const Product = require('../../models/product.model')
 
 // Elements
-const $inputSearch_product = document.getElementById('search-product')
+const $form_product = document.getElementById('form-product')
+
+const $input_searchProduct = document.getElementById('search-product')
 const $table_products = document.getElementById('table-products')
 
 // Function
 async function showProducts() {
   const tableBody = $table_products.querySelector('tbody')
   tableBody.innerHTML = ""
-  const products = await selectProducts($inputSearch_product.value)
+  const products = await selectProducts($input_searchProduct.value)
   tableBody.innerHTML = products.map(p => `
       <tr>
         <th scope="row">${p.id}</th>
@@ -19,8 +23,20 @@ async function showProducts() {
   `).join('')
 }
 
-// Events
-window.addEventListener('load', async () => {
-  showProducts()
-})
+async function sendProduct() {
+  const name = $form_product['name'].value
+  const purchasePrice = $form_product['purchase-price'].value
+  const salePrice = $form_product['sale-price'].value
+  const product = new Product(name, purchasePrice, salePrice)
+  console.log(product)
+  await insertProduct(product)
+  await showProducts()
+}
 
+// Events
+window.addEventListener('load', showProducts)
+
+$form_product.addEventListener('submit', async e => {
+  e.preventDefault()
+  await sendProduct()
+})
