@@ -1,9 +1,6 @@
 const { ipcRenderer } = require('electron')
 const moment = require('moment')
 
-const Product = require('../../models/product.model.js')
-const Transaction = require('../../models/transaction.model.js')
-
 // Elements
 const inp_startDate = document.getElementById('start-date')
 const inp_endDate = document.getElementById('end-date')
@@ -17,13 +14,11 @@ function setToday() {
   inp_endDate.value = moment().format('yyyy-MM-DD')
 }
 
-// On load
-window.addEventListener('load', () => {
+// Events
+window.addEventListener('load', async () => {
   setToday()
-  console.log(inp_startDate.value, inp_endDate.value)
 })
 
-// Events
 $btn_productsWindow.addEventListener('click', () => {
   ipcRenderer.send('open-window', 'products')
 })
