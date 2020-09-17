@@ -12,24 +12,29 @@ const $form_product = document.getElementById('form-product')
 const $input_searchProduct = document.getElementById('search-product')
 const $table_products = document.getElementById('table-products')
 
-// Function
+// Functions
 async function showProducts() {
+  console.log('Showing Products')
   const tableBody = $table_products.querySelector('tbody')
   tableBody.innerHTML = ""
-  const products = await selectProducts($input_searchProduct.value)
-  tableBody.innerHTML = products.map(p => `
-      <tr>
-        <th scope="row">${p.id}</th>
-        <td>${p.name}</td>
-        <td>${p.purchase_price}</td>
-        <td>${p.sale_price}</td>
-        <td>
-          <button class="btn-update" data-id=${p.id} data-name=${p.name} data-purchase_price=${p.purchase_price} data-sale_price=${p.sale_price}>Editar</button>
-          <button class="btn-delete" data-id=${p.id}>Eliminar</button>
-        </td>
-      </tr>
-  `).join('')
-  setClickEvents()
+  try {
+    const products = await selectProducts($input_searchProduct.value)
+    tableBody.innerHTML = products.map(p => `
+        <tr>
+          <th scope="row">${p.id}</th>
+          <td>${p.name}</td>
+          <td>${p.purchase_price}</td>
+          <td>${p.sale_price}</td>
+          <td>
+            <button class="btn-update" data-id=${p.id} data-name=${p.name} data-purchase_price=${p.purchase_price} data-sale_price=${p.sale_price}>Editar</button>
+            <button class="btn-delete" data-id=${p.id}>Eliminar</button>
+          </td>
+        </tr>
+    `).join('')
+    setClickEvents()
+  } catch (error) {
+    console.error('An error ocurred while showing products: ' + error.message)
+  }
 }
 
 async function sendProduct() {
@@ -37,13 +42,27 @@ async function sendProduct() {
   const purchasePrice = $form_product['purchase-price'].value
   const salePrice = $form_product['sale-price'].value
   if (!updateStatus) {
-    const product = new Product(name, purchasePrice, salePrice)
-    await insertProduct(product)
-    await showProducts()
+    try {
+      const product = new Product(name, purchasePrice, salePrice)
+      await insertProduct(product);
+      await showProducts();
+      console.log('Product inserted successfully')
+    } catch (error) {
+      console.error('An error ocurred while inserting product: ' + error.message)
+    }
   } else {
-    const product = new Product(name, purchasePrice, salePrice, updateId)
-    await updateProduct(product)
-    await showProducts()
+    try {
+      const product = new Product(name, purchasePrice, salePrice, updateId)
+      await updateProduct(product);
+      showProducts();
+      updateStatus = false
+      updateId = null
+      $form_product['btn-submit'].innerText = 'Save'
+      $form_product.reset()
+      console.log('Product updated successfully')
+    } catch (error) {
+      console.error('An error ocurred while updating product: ' + error.message)
+    }
   }
 }
 

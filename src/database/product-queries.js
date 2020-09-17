@@ -8,6 +8,7 @@ async function selectProducts(name) {
     return response
   } catch (error) {
     console.error(error.message)
+    throw error
   }
 }
 
@@ -19,6 +20,7 @@ async function insertProduct(product) {
     return response
   } catch (error) {
     console.error(error.message)
+    throw error
   }
 }
 
@@ -30,6 +32,7 @@ async function updateProduct(product) {
     return response
   } catch (error) {
     console.error(error.message)
+    throw error
   }
 }
 
