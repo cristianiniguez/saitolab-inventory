@@ -2,6 +2,10 @@ const { selectProducts, insertProduct } = require('../../database/product-querie
 
 const Product = require('../../models/product.model')
 
+// Global variables
+let updateStatus = false
+let updateId = null
+
 // Elements
 const $form_product = document.getElementById('form-product')
 
@@ -19,18 +23,50 @@ async function showProducts() {
         <td>${p.name}</td>
         <td>${p.purchase_price}</td>
         <td>${p.sale_price}</td>
+        <td>
+          <button class="btn-update" data-id=${p.id} data-name=${p.name} data-purchase_price=${p.purchase_price} data-sale_price=${p.sale_price}>Editar</button>
+          <button class="btn-delete" data-id=${p.id}>Eliminar</button>
+        </td>
       </tr>
   `).join('')
+  setClickEvents()
 }
 
 async function sendProduct() {
   const name = $form_product['name'].value
   const purchasePrice = $form_product['purchase-price'].value
   const salePrice = $form_product['sale-price'].value
-  const product = new Product(name, purchasePrice, salePrice)
-  console.log(product)
-  await insertProduct(product)
-  await showProducts()
+  if (!updateStatus) {
+    const product = new Product(name, purchasePrice, salePrice)
+    console.log(product)
+    await insertProduct(product)
+    await showProducts()
+  } else {
+    console.log('Editando')
+  }
+}
+
+function setClickEvents() {
+  $table_products.querySelectorAll('.btn-update').forEach($btn => {
+    console.log($btn)
+    $btn.addEventListener('click', e => {
+      console.log(e.target.dataset)
+      const { id, name, purchase_price, sale_price } = e.target.dataset
+      updateId = id
+      $form_product['name'].value = name
+      $form_product['purchase-price'].value = purchase_price
+      $form_product['sale-price'].value = sale_price
+      $form_product['btn-submit'].innerText = 'Update'
+      updateStatus = true
+    })
+  })
+  $table_products.querySelectorAll('.btn-delete').forEach($btn => {
+    console.log($btn)
+    $btn.addEventListener('click', e => {
+      console.log(e.target.dataset)
+      console.log('Eliminando')
+    })
+  })
 }
 
 // Events
