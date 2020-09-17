@@ -4,16 +4,18 @@ let connection = null
 
 async function getConnection() {
   try {
-    let connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'Rebeldemenor1',
-      database: 'saitolab_inventory'
-    })
+    if (!connection) {
+      connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'Rebeldemenor1',
+        database: 'saitolab_inventory'
+      })
+    }
     return connection
   } catch (error) {
     console.error(error)
-    return null
+    throw error
   }
 }
 
