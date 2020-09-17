@@ -22,7 +22,19 @@ async function insertProduct(product) {
   }
 }
 
+async function updateProduct(product) {
+  const query = 'UPDATE products SET name=?, purchase_price=?, sale_price=? WHERE id=?'
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query, [product.name, product.purchasePrice, product.salePrice, product.id])
+    return response
+  } catch (error) {
+    console.error(error.message)
+  }
+}
+
 module.exports = {
   selectProducts,
-  insertProduct
+  insertProduct,
+  updateProduct
 }

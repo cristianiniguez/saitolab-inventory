@@ -1,4 +1,4 @@
-const { selectProducts, insertProduct } = require('../../database/product-queries')
+const { selectProducts, insertProduct, updateProduct } = require('../../database/product-queries')
 
 const Product = require('../../models/product.model')
 
@@ -38,19 +38,18 @@ async function sendProduct() {
   const salePrice = $form_product['sale-price'].value
   if (!updateStatus) {
     const product = new Product(name, purchasePrice, salePrice)
-    console.log(product)
     await insertProduct(product)
     await showProducts()
   } else {
-    console.log('Editando')
+    const product = new Product(name, purchasePrice, salePrice, updateId)
+    await updateProduct(product)
+    await showProducts()
   }
 }
 
 function setClickEvents() {
   $table_products.querySelectorAll('.btn-update').forEach($btn => {
-    console.log($btn)
     $btn.addEventListener('click', e => {
-      console.log(e.target.dataset)
       const { id, name, purchase_price, sale_price } = e.target.dataset
       updateId = id
       $form_product['name'].value = name
@@ -61,7 +60,6 @@ function setClickEvents() {
     })
   })
   $table_products.querySelectorAll('.btn-delete').forEach($btn => {
-    console.log($btn)
     $btn.addEventListener('click', e => {
       console.log(e.target.dataset)
       console.log('Eliminando')
