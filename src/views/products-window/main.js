@@ -26,8 +26,8 @@ async function showProducts() {
           <td>${p.purchase_price}</td>
           <td>${p.sale_price}</td>
           <td>
-            <button class="btn-update" data-id=${p.id} data-name=${p.name} data-purchase_price=${p.purchase_price} data-sale_price=${p.sale_price}>Editar</button>
-            <button class="btn-delete" data-id=${p.id}>Eliminar</button>
+            <button class="btn btn-primary btn-update" data-id=${p.id} data-name=${p.name} data-purchase_price=${p.purchase_price} data-sale_price=${p.sale_price}>Editar</button>
+            <button class="btn btn-danger btn-delete" data-id=${p.id}>Eliminar</button>
           </td>
         </tr>
     `).join('')
@@ -44,7 +44,7 @@ async function sendProduct() {
   if (!updateStatus) {
     try {
       const product = new Product(name, purchasePrice, salePrice)
-      await insertProduct(product);
+      const response = await insertProduct(product);
       await showProducts();
       console.log('Product inserted successfully')
     } catch (error) {
@@ -53,7 +53,7 @@ async function sendProduct() {
   } else {
     try {
       const product = new Product(name, purchasePrice, salePrice, updateId)
-      await updateProduct(product);
+      const response = await updateProduct(product);
       showProducts();
       updateStatus = false
       updateId = null

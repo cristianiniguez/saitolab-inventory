@@ -11,47 +11,61 @@
 
 <body>
   <header>
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-dark bg-success">
       <span class="navbar-brand mb-0 h1">Product Master</span>
     </nav>
   </header>
   <main>
     <div class="container-fluid h-100">
-      <div class="row">
-        <div class="col-md-4">
+      <div class="row h-100">
+        <div class="col-md-3 bg-light border-right border-bottom p-4">
           <form id="form-product">
-            <div class="form-group">
-              <label>Product <input type="text" id="name" required></label>
+            <div class="row form-group">
+              <label class="col-5" for="name">Product</label>
+              <div class="col-7">
+                <input type="text" id="name" class="form-control" required>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-5" for="purchase-price">Purchase Price</label>
+              <div class="col-7">
+                <input type="number" step="0.01" id="purchase-price" class="form-control" required>
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-5" for="sale-price">Sale Price</label>
+              <div class="col-7">
+                <input type="number" step="0.01" id="sale-price" class="form-control" required>
+              </div>
             </div>
             <div class="form-group">
-              <label>Purchase Price <input type="number" step="0.01" id="purchase-price" required></label>
-            </div>
-            <div class="form-group">
-              <label>Sale Price <input type="number" step="0.01" id="sale-price" required></label>
-            </div>
-            <div class="form-group">
-              <button id="btn-submit">Add</button>
+              <button id="btn-submit" class="btn btn-success btn-block">Add</button>
             </div>
           </form>
-        </div>
-        <div class="col-md-8">
           <div class="form-group">
-            <label>Product Name <input type="text" id="search-product"></label>
-            <button>Export to PDF</button>
-            <button>Export to Excel</button>
+            <button id="btn-export-pdf" class="btn btn-danger btn-block">Export to PDF</button>
+            <button id="btn-export-xls" class="btn btn-success btn-block">Export to Excel</button>
           </div>
-          <table class="table table-bordered table-hover" id="table-products">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Purchase Price</th>
-                <th scope="col">Sale Price</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        </div>
+        <div class="col-md-9 p-4">
+          <div class="form-group input-group">
+            <input type="text" id="search-product" class="form-control" placeholder="Product Name" autofocus>
+            <button class="btn btn-success">Search</button>
+          </div>
+          <div class="products-table-container">
+            <table class="table table-bordered table-hover" id="table-products">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Purchase Price</th>
+                  <th scope="col">Sale Price</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
