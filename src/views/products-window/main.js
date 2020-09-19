@@ -1,3 +1,4 @@
+const { ipcRenderer } = require('electron')
 const { selectProducts, insertProduct, updateProduct } = require('../../database/product-queries')
 
 const Product = require('../../models/product.model')
@@ -14,7 +15,6 @@ const $table_products = document.getElementById('table-products')
 
 // Functions
 async function showProducts() {
-  console.log('Showing Products')
   const tableBody = $table_products.querySelector('tbody')
   tableBody.innerHTML = ""
   try {
@@ -33,7 +33,8 @@ async function showProducts() {
     `).join('')
     setClickEvents()
   } catch (error) {
-    console.error('An error ocurred while showing products: ' + error.message)
+    showMsgDialog({ type: 'error', message: 'An error ocurred while showing products: ' + error.message })
+    console.error(error)
   }
 }
 
@@ -45,23 +46,25 @@ async function sendProduct() {
     try {
       const product = new Product(name, purchasePrice, salePrice)
       const response = await insertProduct(product);
+      showMsgDialog({ type: 'info', message: 'Product inserted successfully' })
       await showProducts();
-      console.log('Product inserted successfully')
     } catch (error) {
-      console.error('An error ocurred while inserting product: ' + error.message)
+      showMsgDialog({ type: 'error', message: 'An error ocurred while inserting product: ' + error.message })
+      console.error(error)
     }
   } else {
     try {
       const product = new Product(name, purchasePrice, salePrice, updateId)
       const response = await updateProduct(product);
-      showProducts();
+      showMsgDialog({ type: 'info', message: 'Product updated successfully' })
       updateStatus = false
       updateId = null
       $form_product['btn-submit'].innerText = 'Save'
       $form_product.reset()
-      console.log('Product updated successfully')
+      await showProducts();
     } catch (error) {
-      console.error('An error ocurred while updating product: ' + error.message)
+      showMsgDialog({ type: 'error', message: 'An error ocurred while updating product: ' + error.message })
+      console.error(error)
     }
   }
 }
@@ -84,6 +87,10 @@ function setClickEvents() {
       console.log('Eliminando')
     })
   })
+}
+
+function showMsgDialog(options) {
+  ipcRenderer.send('show-msg-dialog', { win: 'productsWindow', ...options })
 }
 
 // Events

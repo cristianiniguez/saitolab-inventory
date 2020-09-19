@@ -1,9 +1,11 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 
-let mainWindow
-let productsWindow
-let transactionsWindow
+let windows = {
+  mainWindow: null,
+  productsWindow: null,
+  transactionsWindow: null
+}
 
 const startWindowOptions = {
   width: 800,
@@ -14,25 +16,25 @@ const startWindowOptions = {
 }
 
 const createMainWindow = () => {
-  mainWindow = new BrowserWindow({
+  windows.mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
     webPreferences: { nodeIntegration: true },
   })
-  mainWindow.loadFile(path.join(__dirname, 'views', 'main-window', 'index.html'));
-  mainWindow.on('close', () => {
+  windows.mainWindow.loadFile(path.join(__dirname, 'views', 'main-window', 'index.html'));
+  windows.mainWindow.on('close', () => {
     app.quit()
   })
 }
 
 const createProductsWindow = () => {
-  productsWindow = new BrowserWindow(startWindowOptions)
-  productsWindow.loadFile(path.join(__dirname, 'views', 'products-window', 'index.html'));
+  windows.productsWindow = new BrowserWindow(startWindowOptions)
+  windows.productsWindow.loadFile(path.join(__dirname, 'views', 'products-window', 'index.html'));
 }
 
 const createTransactionsWindow = () => {
-  transactionsWindow = new BrowserWindow(startWindowOptions)
-  transactionsWindow.loadFile(path.join(__dirname, 'views', 'transactions-window', 'index.html'));
+  windows.transactionsWindow = new BrowserWindow(startWindowOptions)
+  windows.transactionsWindow.loadFile(path.join(__dirname, 'views', 'transactions-window', 'index.html'));
 }
 
 app.on('ready', () => {
@@ -50,4 +52,13 @@ ipcMain.on('open-window', (event, args) => {
     default:
       console.log('I dont know what are you saying')
   }
+})
+
+ipcMain.on('show-msg-dialog', (event, args) => {
+  const { win, type, message } = args
+  dialog.showMessageBox(windows[win], {
+    type: type,
+    title: 'SaitoLab Inventory',
+    message: message
+  })
 })
