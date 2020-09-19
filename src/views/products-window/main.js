@@ -9,12 +9,14 @@ let updateId = null
 
 // Elements
 const $form_product = document.getElementById('form-product')
-
-const $input_searchProduct = document.getElementById('search-product')
+const $input_searchProduct = document.getElementById('input-search-product')
+const $btn_searchProduct = document.getElementById('btn-search-product')
 const $table_products = document.getElementById('table-products')
+const $overlay = document.querySelector('.overlay')
 
 // Functions
 async function showProducts() {
+  $overlay.style.display = "block"
   const tableBody = $table_products.querySelector('tbody')
   tableBody.innerHTML = ""
   try {
@@ -35,6 +37,8 @@ async function showProducts() {
   } catch (error) {
     showMsgDialog({ type: 'error', message: 'An error ocurred while showing products: ' + error.message })
     console.error(error)
+  } finally {
+    $overlay.style.display = "none"
   }
 }
 
@@ -100,3 +104,5 @@ $form_product.addEventListener('submit', async e => {
   e.preventDefault()
   await sendProduct()
 })
+
+$btn_searchProduct.addEventListener('click', showProducts)
