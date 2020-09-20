@@ -9,8 +9,7 @@ let updateId = null
 
 // Elements
 const $form_product = document.getElementById('form-product')
-const $input_searchProduct = document.getElementById('input-search-product')
-const $btn_searchProduct = document.getElementById('btn-search-product')
+const $form_searchProduct = document.getElementById('form-search-product')
 const $table_products = document.getElementById('table-products')
 const $overlay = document.querySelector('.overlay')
 
@@ -20,7 +19,7 @@ async function showProducts() {
   const tableBody = $table_products.querySelector('tbody')
   tableBody.innerHTML = ""
   try {
-    const products = await selectProducts($input_searchProduct.value)
+    const products = await selectProducts($form_searchProduct['input-search-product'].value)
     tableBody.innerHTML = products.map(p => `
         <tr>
           <th scope="row">${p.id}</th>
@@ -105,4 +104,7 @@ $form_product.addEventListener('submit', async e => {
   await sendProduct()
 })
 
-$btn_searchProduct.addEventListener('click', showProducts)
+$form_searchProduct.addEventListener('submit', async e => {
+  e.preventDefault()
+  await showProducts()
+})
