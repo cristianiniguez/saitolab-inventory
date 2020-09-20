@@ -47,14 +47,14 @@
             <button id="btn-export-xls" class="btn btn-success btn-block">Export to Excel</button>
           </div>
         </div>
-        <div class="col-md-9 p-4">
+        <div class="col-md-9 p-4 d-flex flex-column">
           <form id="form-search-product">
             <div class="form-group input-group">
               <input type="text" id="input-search-product" class="form-control" placeholder="Product Name">
               <button id="btn-search-product" class="btn btn-success">Search</button>
             </div>
           </form>
-          <div class="products-table-container">
+          <div class="col overflow-auto flex-grow-1 p-0">
             <table class="table table-bordered table-hover" id="table-products">
               <thead class="thead-dark">
                 <tr>
