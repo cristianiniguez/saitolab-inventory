@@ -1,5 +1,5 @@
-const { ipcRenderer } = require('electron')
-const { selectProducts, insertProduct, updateProduct } = require('../../database/product-queries')
+const { ipcRenderer, remote } = require('electron')
+const { selectProducts, insertProduct, updateProduct } = remote.require('./database/product-queries')
 
 const Product = require('../../models/product.model')
 

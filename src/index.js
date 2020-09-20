@@ -11,7 +11,8 @@ const startWindowOptions = {
   width: 800,
   height: 600,
   webPreferences: {
-    nodeIntegration: true
+    nodeIntegration: true,
+    enableRemoteModule: true
   }
 }
 
@@ -19,7 +20,10 @@ const createMainWindow = () => {
   windows.mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
-    webPreferences: { nodeIntegration: true },
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true
+    },
   })
   windows.mainWindow.loadFile(path.join(__dirname, 'views', 'main-window', 'index.html'));
   windows.mainWindow.on('close', () => {
