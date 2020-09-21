@@ -2,8 +2,13 @@ const { ipcRenderer, remote } = require('electron')
 const moment = require('moment')
 
 const { selectProducts, getProductPrice } = remote.require('./database/product-queries')
+const { selectTransactions, insertTransaction, updateTransaction } = remote.require('./database/transaction-queries')
+
+const Transaction = require('../../models/transaction.model')
 
 // Global variables
+let updateStatus = false
+let updateId = null
 
 // Elements
 const $form_transaction = document.getElementById('form-transaction')
@@ -23,15 +28,15 @@ async function showProductsList() {
 }
 
 async function getAmount() {
-  const productId = $form_transaction['product'].value
+  const idProduct = $form_transaction['product'].value
   const quantity = $form_transaction['quantity'].value
   const type = $form_transaction['type'].value
-  if (productId === '' || type === '') {
+  if (idProduct === '' || type === '') {
     $form_transaction['amount'].value = ''
     return
   }
   try {
-    const price = await getProductPrice(productId, type)
+    const price = await getProductPrice(idProduct, type)
     $form_transaction['amount'].value = (price * quantity).toFixed(2)
   } catch (error) {
     showMsgDialog({ type: 'error', message: 'An error ocurred while getting amount: ' + error.message })
@@ -45,8 +50,33 @@ function setToday() {
   $form_searchTransaction['end-date'].value = moment().format('yyyy-MM-DD')
 }
 
+async function sendTransaction() {
+  const idProduct = $form_transaction['product'].value
+  const quantity = $form_transaction['quantity'].value
+  const type = $form_transaction['type'].value
+  const date = $form_transaction['date'].value
+  if (idProduct === '' || type === '') {
+    showMsgDialog({ type: 'warning', message: 'Invalid data' })
+    return
+  }
+  if (!updateStatus) {
+    try {
+      const transaction = new Transaction(idProduct, quantity, type, date)
+      console.log(transaction)
+      const response = await insertTransaction(transaction)
+      showMsgDialog({ type: 'info', message: 'Transaction inserted successfully' })
+      // await showProducts();
+    } catch (error) {
+      showMsgDialog({ type: 'error', message: 'An error ocurred while inserting transaction: ' + error.message })
+      console.error(error)
+    }
+  } else {
+
+  }
+}
+
 function showMsgDialog(options) {
-  ipcRenderer.send('show-msg-dialog', { win: 'productsWindow', ...options })
+  ipcRenderer.send('show-msg-dialog', { win: 'transactionsWindow', ...options })
 }
 
 // Events
@@ -58,3 +88,8 @@ window.addEventListener('load', async () => {
 $form_transaction['product'].addEventListener('change', getAmount)
 $form_transaction['quantity'].addEventListener('change', getAmount)
 $form_transaction['type'].addEventListener('change', getAmount)
+
+$form_transaction.addEventListener('submit', async e => {
+  e.preventDefault()
+  await sendTransaction()
+})
