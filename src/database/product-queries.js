@@ -12,6 +12,18 @@ async function selectProducts(name) {
   }
 }
 
+async function getProductPrice(id, type) {
+  const query = `SELECT ${type}_price FROM products WHERE id = ${id}`
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query)
+    return response[0][`${type}_price`]
+  } catch (error) {
+    console.error(error.message)
+    throw error
+  }
+}
+
 async function insertProduct(product) {
   const query = 'INSERT INTO products (`name`, `purchase_price`, `sale_price`) VALUES (?, ?, ?)'
   try {
@@ -38,6 +50,7 @@ async function updateProduct(product) {
 
 module.exports = {
   selectProducts,
+  getProductPrice,
   insertProduct,
   updateProduct
 }
