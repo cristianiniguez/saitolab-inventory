@@ -13,13 +13,14 @@ let updateId = null
 // Elements
 const $form_transaction = document.getElementById('form-transaction')
 const $form_searchTransaction = document.getElementById('form-search-transaction')
+const $table_transactions = document.getElementById('table-transactions')
+const $overlay = document.querySelector('.overlay')
 
 // Functions
 async function showProductsList() {
   try {
     $form_transaction['product'].innerHTML = '<option value=""></option>'
     const products = await selectProducts('')
-    console.log(products[0])
     $form_transaction['product'].innerHTML += products.map(p => `<option value="${p.id}">${p.name}</option>`).join('')
   } catch (error) {
     showMsgDialog({ type: 'error', message: 'An error ocurred while showing products: ' + error.message })
@@ -50,6 +51,42 @@ function setToday() {
   $form_searchTransaction['end-date'].value = moment().format('yyyy-MM-DD')
 }
 
+async function showTransactions() {
+  $overlay.style.display = "block"
+  const tableBody = $table_transactions.querySelector('tbody')
+  tableBody.innerHTML = ''
+  const type = $form_searchTransaction['type'].value
+  const startDate = $form_searchTransaction['start-date'].value
+  const endDate = $form_searchTransaction['end-date'].value
+  try {
+    const transactions = await selectTransactions(type, startDate, endDate)
+    tableBody.innerHTML = transactions.map(t => `
+      <tr>
+        <th scope="row">${t.id}</th>
+        <td>${t.id_product}</td>
+        <td>${t.quantity}</td>
+        <td>${t.type}</td>
+        <td>${moment(t.date).format('yyyy-MM-DD')}</td>
+        <td>
+          <button class="btn btn-primary btn-update"
+            data-id=${t.id}
+            data-idProduct=${t.id_product}
+            data-quantity=${t.quantity}
+            data-type=${t.type}
+            data-date=${moment(t.date).format('yyyy-MM-DD')}
+          >Editar</button>
+          <button class="btn btn-danger btn-delete" data-id=${t.id}>Eliminar</button>
+        </td>
+      </tr>
+    `).join('')
+  } catch (error) {
+    showMsgDialog({ type: 'error', message: 'An error ocurred while getting transaction: ' + error.message })
+    console.error(error)
+  } finally {
+    $overlay.style.display = "none"
+  }
+}
+
 async function sendTransaction() {
   const idProduct = $form_transaction['product'].value
   const quantity = $form_transaction['quantity'].value
@@ -65,7 +102,7 @@ async function sendTransaction() {
       console.log(transaction)
       const response = await insertTransaction(transaction)
       showMsgDialog({ type: 'info', message: 'Transaction inserted successfully' })
-      // await showProducts();
+      await showProducts();
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while inserting transaction: ' + error.message })
       console.error(error)
@@ -83,6 +120,7 @@ function showMsgDialog(options) {
 window.addEventListener('load', async () => {
   await showProductsList()
   setToday()
+  await showTransactions()
 })
 
 $form_transaction['product'].addEventListener('change', getAmount)
@@ -92,4 +130,9 @@ $form_transaction['type'].addEventListener('change', getAmount)
 $form_transaction.addEventListener('submit', async e => {
   e.preventDefault()
   await sendTransaction()
+})
+
+$form_searchTransaction.addEventListener('submit', async e => {
+  e.preventDefault()
+  await showTransactions()
 })

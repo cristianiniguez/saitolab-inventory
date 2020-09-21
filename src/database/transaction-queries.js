@@ -1,7 +1,15 @@
 const getConnection = require('./connection')
 
-async function selectTransactions(type, dateFrom, dateTo) {
-  // TO DO
+async function selectTransactions(type, startDate, endDate) {
+  const query = `SELECT * FROM transactions WHERE \`type\` LIKE '%${type}%' AND \`date\` BETWEEN '${startDate}' AND '${endDate}'`
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query)
+    return response
+  } catch (error) {
+    console.error(error.message)
+    throw error
+  }
 }
 
 async function insertTransaction(transaction) {
