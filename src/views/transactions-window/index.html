@@ -11,90 +11,100 @@
 
 <body>
   <header>
-    <nav class="navbar navbar-dark bg-primary">
-      <span class="navbar-brand mb-0 h1">Product Master</span>
+    <nav class="navbar navbar-dark bg-warning">
+      <h1 class="navbar-brand mb-0">Transactions</h1>
     </nav>
   </header>
   <main>
     <div class="container-fluid h-100">
-      <div class="row">
-        <div class="col-md-4">
-          <form>
-            <div class="form-group">
-              <label>
-                Product
-                <select id="product-name">
+      <div class="row h-100">
+        <div class="col-md-3 bg-light border-right border-bottom p-4">
+          <form id="form-transaction">
+            <div class="row form-group">
+              <label class="col-4" for="product">Product</label>
+              <div class="col-8">
+                <select id="product" class="form-control">
                   <option value="product-1">Product 1</option>
                   <option value="product-2">Product 2</option>
                   <option value="product-3">Product 3</option>
                   <option value="product-4">Product 4</option>
                 </select>
-              </label>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Quantity <input type="number" step="1" value="1"></label>
+            <div class="row form-group">
+              <label class="col-4" for="quantity">Quantity</label>
+              <div class="col-8">
+                <input class="form-control" id="quantity" type="number" step="1" value="1">
+              </div>
             </div>
-            <div class="form-group">
-              <label>Date <input type="date"></label>
+            <div class="row form-group">
+              <label class="col-4">Date</label>
+              <div class="col-8" for="date">
+                <input class="form-control" id="date" type="date">
+              </div>
             </div>
-            <div class="form-group">
-              <label>
-                Type <select id="transaction-type">
+            <div class="row form-group">
+              <label class="col-4" for="type">Type</label>
+              <div class="col-8">
+                <select id="type" class="form-control">
                   <option value="purchase">Purchase</option>
                   <option value="sale">Sale</option>
                 </select>
-              </label>
+              </div>
             </div>
             <div class="form-group">
-              <button>Save</button>
+              <button id="btn-submit" class="btn btn-warning btn-block">Add</button>
+            </div>
+            <div class="form-group">
+              <button id="btn-export-pdf" class="btn btn-danger btn-block">Export to PDF</button>
+              <button id="btn-export-xls" class="btn btn-success btn-block">Export to Excel</button>
             </div>
           </form>
         </div>
-        <div class="col-md-8">
-          <form>
+        <div class="col-md-9 p-4 d-flex flex-column">
+          <form id="form-search-transaction" class="form-inline mb-4">
             <div class="form-group">
-              <label>All <input type="radio" name="type" value="all"></label>
-              <label>Purchase <input type="radio" name="type" value="Purchase"></label>
-              <label>Sale <input type="radio" name="type" value="Sale"></label>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="all-transactions" name="type" class="custom-control-input" checked>
+                <label class="custom-control-label" for="all-transactions">All</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="purchase-transactions" name="type" class="custom-control-input">
+                <label class="custom-control-label" for="purchase-transactions">Purchase</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="sale-transactions" name="type" class="custom-control-input">
+                <label class="custom-control-label" for="sale-transactions">Sale</label>
+              </div>
             </div>
-            <div class="form-group">
-              <button>Export to PDF</button>
-              <button>Export to Excel</button>
+            <div class="form-group ml-4">
+              <label for="date-from" class="mx-2">From</label>
+              <input type="date" id="date-from" class="form-control">
+              <label for="date-to" class="mx-2">To</label>
+              <input type="date" id="date-to" class="form-control">
+            </div>
+            <div class="form-group ml-4">
+              <button class="btn btn-warning">Search</button>
             </div>
           </form>
-          <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="col overflow-auto flex-grow-1 p-0">
+            <table class="table table-bordered table-hover" id="table-transactions">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
+    <div class="overlay" style="display: none;"></div>
   </main>
   <footer class="bg-dark text-white text-center p-2">
     <p>SaitoLab &copy; 2020</p>
