@@ -64,8 +64,11 @@ async function showTransactions() {
       <tr>
         <th scope="row">${t.id}</th>
         <td>${t.id_product}</td>
+        <td>${t.name}</td>
         <td>${t.quantity}</td>
         <td>${t.type}</td>
+        <td>${t.price}</td>
+        <td>${t.amount}</td>
         <td>${moment(t.date).format('yyyy-MM-DD')}</td>
         <td>
           <button class="btn btn-primary btn-update"
@@ -79,6 +82,7 @@ async function showTransactions() {
         </td>
       </tr>
     `).join('')
+    setClickEvents()
   } catch (error) {
     showMsgDialog({ type: 'error', message: 'An error ocurred while getting transaction: ' + error.message })
     console.error(error)
@@ -110,6 +114,20 @@ async function sendTransaction() {
   } else {
 
   }
+}
+
+function setClickEvents() {
+  $table_transactions.querySelectorAll('.btn-update').forEach($btn => {
+    $btn.addEventListener('click', e => {
+      console.log(e.target.dataset)
+      // const { id, idProduct, quantity, type, date } = e.target.dataset
+      // updateId = id
+      // $form_transaction[''].value = 
+      // $form_transaction[''].value = 
+      // $form_transaction[''].value = 
+      // $form_transaction[''].value = 
+    })
+  })
 }
 
 function showMsgDialog(options) {
