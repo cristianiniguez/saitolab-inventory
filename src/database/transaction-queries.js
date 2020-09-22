@@ -38,8 +38,21 @@ async function updateTransaction(transaction) {
   }
 }
 
+async function deleteTransaction(id) {
+  const query = 'DELETE FROM transactions WHERE id=?'
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query, [id])
+    return response
+  } catch (error) {
+    console.error(error.message)
+    throw error
+  }
+}
+
 module.exports = {
   selectTransactions,
   insertTransaction,
-  updateTransaction
+  updateTransaction,
+  deleteTransaction
 }

@@ -2,7 +2,7 @@ const { ipcRenderer, remote } = require('electron')
 const moment = require('moment')
 
 const { selectProducts, getProductPrice } = remote.require('./database/product-queries')
-const { selectTransactions, insertTransaction, updateTransaction } = remote.require('./database/transaction-queries')
+const { selectTransactions, insertTransaction, updateTransaction, deleteTransaction } = remote.require('./database/transaction-queries')
 
 const Transaction = require('../../models/transaction.model')
 
@@ -145,6 +145,22 @@ function setClickEvents() {
       $form_transaction['btn-submit'].innerText = 'Update'
       await getAmount()
       updateStatus = true
+    })
+  })
+  $table_transactions.querySelectorAll('.btn-delete').forEach($btn => {
+    $btn.addEventListener('click', async e => {
+      const { id } = e.target.dataset
+      const confirmation = confirm('Are you sure you want to delete the transaction?')
+      if (confirmation) {
+        try {
+          const response = await deleteTransaction(id)
+          showMsgDialog({ type: 'info', message: 'Transaction deleted successfully' })
+          await showTransactions()
+        } catch (error) {
+          showMsgDialog({ type: 'error', message: 'An error ocurred while deleting transaction: ' + error.message })
+          console.error(error)
+        }
+      }
     })
   })
 }
