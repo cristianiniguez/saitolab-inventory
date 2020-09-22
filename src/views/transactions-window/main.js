@@ -47,8 +47,8 @@ async function getAmount() {
 
 function setDates() {
   setToday()
-  $form_searchTransaction['start-date'].value = moment().format('yyyy-MM-DD')
-  $form_searchTransaction['end-date'].value = moment().format('yyyy-MM-DD')
+  $form_searchTransaction['start-date'].value = moment().date(1).format('yyyy-MM-DD')
+  $form_searchTransaction['end-date'].value = moment().add(1, 'months').date(1).subtract(1, 'days').format('yyyy-MM-DD')
 }
 
 function setToday() {
@@ -66,8 +66,6 @@ async function showTransactions() {
     const transactions = await selectTransactions(type, startDate, endDate)
     tableBody.innerHTML = transactions.map(t => `
       <tr>
-        <th scope="row">${t.id}</th>
-        <td>${t.id_product}</td>
         <td>${t.name}</td>
         <td>${t.quantity}</td>
         <td>${t.type}</td>

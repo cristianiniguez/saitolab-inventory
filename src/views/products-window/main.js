@@ -22,7 +22,6 @@ async function showProducts() {
     const products = await selectProducts($form_searchProduct['input-search-product'].value)
     tableBody.innerHTML = products.map(p => `
         <tr>
-          <th scope="row">${p.id}</th>
           <td>${p.name}</td>
           <td>${p.purchase_price}</td>
           <td>${p.sale_price}</td>
