@@ -1,7 +1,7 @@
 const getConnection = require('./connection')
 
 async function selectTransactions(type, startDate, endDate) {
-  const query = `SELECT * FROM transactions_view WHERE \`type\` LIKE '%${type}%' AND \`date\` BETWEEN '${startDate}' AND '${endDate}'`
+  const query = `SELECT * FROM transactions_view WHERE \`type\` LIKE '%${type}%' AND \`date\` BETWEEN '${startDate}' AND '${endDate}' ORDER BY \`date\``
   try {
     const connection = await getConnection()
     const response = await connection.query(query)
@@ -26,7 +26,16 @@ async function insertTransaction(transaction) {
 }
 
 async function updateTransaction(transaction) {
-  // TO DO
+  const query = 'UPDATE transactions SET id_product=?, quantity=?, type=?, date=? WHERE id=?'
+  const { idProduct, quantity, type, date, id } = transaction
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query, [idProduct, quantity, type, date, id])
+    return response
+  } catch (error) {
+    console.error(error.message)
+    throw error
+  }
 }
 
 module.exports = {

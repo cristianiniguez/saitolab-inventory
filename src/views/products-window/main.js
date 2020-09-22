@@ -50,6 +50,7 @@ async function sendProduct() {
       const product = new Product(name, purchasePrice, salePrice)
       const response = await insertProduct(product);
       showMsgDialog({ type: 'info', message: 'Product inserted successfully' })
+      $form_product.reset()
       await showProducts();
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while inserting product: ' + error.message })

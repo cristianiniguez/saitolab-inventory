@@ -45,10 +45,14 @@ async function getAmount() {
   }
 }
 
-function setToday() {
-  $form_transaction['date'].value = moment().format('yyyy-MM-DD')
+function setDates() {
+  setToday()
   $form_searchTransaction['start-date'].value = moment().format('yyyy-MM-DD')
   $form_searchTransaction['end-date'].value = moment().format('yyyy-MM-DD')
+}
+
+function setToday() {
+  $form_transaction['date'].value = moment().format('yyyy-MM-DD')
 }
 
 async function showTransactions() {
@@ -106,26 +110,43 @@ async function sendTransaction() {
       console.log(transaction)
       const response = await insertTransaction(transaction)
       showMsgDialog({ type: 'info', message: 'Transaction inserted successfully' })
-      await showProducts();
+      $form_transaction.reset()
+      setToday()
+      await showTransactions()
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while inserting transaction: ' + error.message })
       console.error(error)
     }
   } else {
-
+    try {
+      const transaction = new Transaction(idProduct, quantity, type, date, updateId)
+      const response = await updateTransaction(transaction)
+      showMsgDialog({ type: 'info', message: 'Transaction updated successfully' })
+      updateStatus = false
+      updateId = null
+      $form_transaction['btn-submit'].value = 'Save'
+      $form_transaction.reset()
+      setToday()
+      await showTransactions()
+    } catch (error) {
+      showMsgDialog({ type: 'error', message: 'An error ocurred while updating transaction: ' + error.message })
+      console.error(error)
+    }
   }
 }
 
 function setClickEvents() {
   $table_transactions.querySelectorAll('.btn-update').forEach($btn => {
-    $btn.addEventListener('click', e => {
-      console.log(e.target.dataset)
-      // const { id, idProduct, quantity, type, date } = e.target.dataset
-      // updateId = id
-      // $form_transaction[''].value = 
-      // $form_transaction[''].value = 
-      // $form_transaction[''].value = 
-      // $form_transaction[''].value = 
+    $btn.addEventListener('click', async e => {
+      const { id, idproduct, quantity, type, date } = e.target.dataset
+      updateId = id
+      $form_transaction['product'].value = idproduct
+      $form_transaction['quantity'].value = quantity
+      $form_transaction['type'].value = type
+      $form_transaction['date'].value = date
+      $form_transaction['btn-submit'].innerText = 'Update'
+      await getAmount()
+      updateStatus = true
     })
   })
 }
@@ -137,7 +158,7 @@ function showMsgDialog(options) {
 // Events
 window.addEventListener('load', async () => {
   await showProductsList()
-  setToday()
+  setDates()
   await showTransactions()
 })
 
