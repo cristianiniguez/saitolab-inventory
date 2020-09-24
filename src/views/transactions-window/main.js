@@ -17,6 +17,17 @@ const $table_transactions = document.getElementById('table-transactions')
 const $overlay = document.querySelector('.overlay')
 
 // Functions
+
+function enableForm(state) {
+  $form_transaction['product'].disabled = !state
+  $form_transaction['quantity'].disabled = !state
+  $form_transaction['type'].disabled = !state
+  $form_transaction['date'].disabled = !state
+  $form_transaction['btn-submit'].disabled = !state
+  $form_transaction.reset()
+  setToday()
+}
+
 async function showProductsList() {
   try {
     $form_transaction['product'].innerHTML = '<option value=""></option>'
@@ -105,11 +116,9 @@ async function sendTransaction() {
   if (!updateStatus) {
     try {
       const transaction = new Transaction(idProduct, quantity, type, date)
-      console.log(transaction)
       const response = await insertTransaction(transaction)
       showMsgDialog({ type: 'info', message: 'Transaction inserted successfully' })
-      $form_transaction.reset()
-      setToday()
+      enableForm(false)
       await showTransactions()
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while inserting transaction: ' + error.message })
@@ -122,9 +131,8 @@ async function sendTransaction() {
       showMsgDialog({ type: 'info', message: 'Transaction updated successfully' })
       updateStatus = false
       updateId = null
-      $form_transaction['btn-submit'].value = 'Save'
-      $form_transaction.reset()
-      setToday()
+      $form_transaction['btn-submit'].innerText = 'Save'
+      enableForm(false)
       await showTransactions()
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while updating transaction: ' + error.message })
@@ -138,6 +146,7 @@ function setClickEvents() {
     $btn.addEventListener('click', async e => {
       const { id, idproduct, quantity, type, date } = e.target.dataset
       updateId = id
+      enableForm(true)
       $form_transaction['product'].value = idproduct
       $form_transaction['quantity'].value = quantity
       $form_transaction['type'].value = type
@@ -183,6 +192,13 @@ $form_transaction['type'].addEventListener('change', getAmount)
 $form_transaction.addEventListener('submit', async e => {
   e.preventDefault()
   await sendTransaction()
+})
+
+$form_transaction['btn-new'].addEventListener('click', () => {
+  enableForm(true)
+  updateStatus = false
+  updateId = null
+  $form_transaction['btn-submit'].innerText = 'Save'
 })
 
 $form_searchTransaction.addEventListener('submit', async e => {

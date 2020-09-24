@@ -23,7 +23,7 @@
             <div class="row form-group">
               <label class="col-4" for="product">Product</label>
               <div class="col-8">
-                <select id="product" class="form-control">
+                <select id="product" class="form-control" disabled>
                   <option value=""></option>
                 </select>
               </div>
@@ -31,13 +31,13 @@
             <div class="row form-group">
               <label class="col-4" for="quantity">Quantity</label>
               <div class="col-8">
-                <input class="form-control" id="quantity" type="number" min="1" step="1" value="1">
+                <input class="form-control" id="quantity" type="number" min="1" step="1" value="1" disabled>
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4" for="type">Type</label>
               <div class="col-8">
-                <select id="type" class="form-control">
+                <select id="type" class="form-control" disabled>
                   <option value=""></option>
                   <option value="purchase">Purchase</option>
                   <option value="sale">Sale</option>
@@ -53,11 +53,18 @@
             <div class="row form-group">
               <label class="col-4">Date</label>
               <div class="col-8" for="date">
-                <input class="form-control" id="date" type="date">
+                <input class="form-control" id="date" type="date" disabled>
               </div>
             </div>
             <div class="form-group">
-              <button id="btn-submit" class="btn btn-warning btn-block">Add</button>
+              <div class="row">
+                <div class="col-6">
+                  <button type="button" id="btn-new" class="btn btn-warning btn-block">New</button>
+                </div>
+                <div class="col-6">
+                  <button type="submit" id="btn-submit" class="btn btn-primary btn-block" disabled>Save</button>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <button id="btn-export-pdf" class="btn btn-danger btn-block">Export to PDF</button>
