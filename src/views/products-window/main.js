@@ -1,5 +1,6 @@
 const { ipcRenderer, remote } = require('electron')
-const { selectProducts, insertProduct, updateProduct } = remote.require('./database/product-queries')
+const { selectProducts, insertProduct, updateProduct, deleteProduct } = remote.require('./database/product-queries')
+const { selectNumberTransactions } = remote.require('./database/transaction-queries')
 
 const Product = require('../../models/product.model')
 
@@ -85,9 +86,24 @@ function setClickEvents() {
     })
   })
   $table_products.querySelectorAll('.btn-delete').forEach($btn => {
-    $btn.addEventListener('click', e => {
-      console.log(e.target.dataset)
-      console.log('Eliminando')
+    $btn.addEventListener('click', async e => {
+      const { id } = e.target.dataset
+      const numTransctions = await selectNumberTransactions(id)
+      if (numTransctions > 0) {
+        showMsgDialog({ type: 'warning', message: 'This product has transactions registered\nYou can\'t delete it' })
+      } else {
+        const confirmation = confirm('Are you sure you want to delete the product?')
+        if (confirmation) {
+          try {
+            const response = await deleteProduct(id)
+            showMsgDialog({ type: 'info', message: 'Product deleted successfully' })
+            await showProducts()
+          } catch (error) {
+            showMsgDialog({ type: 'error', message: 'An error ocurred while deleting product: ' + error.message })
+            console.error(error)
+          }
+        }
+      }
     })
   })
 }
