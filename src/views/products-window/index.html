@@ -23,23 +23,30 @@
             <div class="row form-group">
               <label class="col-5" for="name">Product</label>
               <div class="col-7">
-                <input type="text" id="name" class="form-control" required>
+                <input type="text" id="name" class="form-control" required disabled>
               </div>
             </div>
             <div class="row form-group">
               <label class="col-5" for="purchase-price">Purchase Price</label>
               <div class="col-7">
-                <input type="number" step="0.01" id="purchase-price" class="form-control" required>
+                <input type="number" step="0.01" id="purchase-price" class="form-control" required disabled>
               </div>
             </div>
             <div class="row form-group">
               <label class="col-5" for="sale-price">Sale Price</label>
               <div class="col-7">
-                <input type="number" step="0.01" id="sale-price" class="form-control" required>
+                <input type="number" step="0.01" id="sale-price" class="form-control" required disabled>
               </div>
             </div>
             <div class="form-group">
-              <button id="btn-submit" class="btn btn-success btn-block">Add</button>
+              <div class="row">
+                <div class="col-6">
+                  <button type="button" id="btn-new" class="btn btn-success btn-block">New</button>
+                </div>
+                <div class="col-6">
+                  <button type="submit" id="btn-submit" class="btn btn-primary btn-block" disabled>Save</button>
+                </div>
+              </div>
             </div>
           </form>
           <div class="form-group">

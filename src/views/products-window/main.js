@@ -15,6 +15,14 @@ const $table_products = document.getElementById('table-products')
 const $overlay = document.querySelector('.overlay')
 
 // Functions
+function enableForm(state) {
+  $form_product['name'].disabled = !state
+  $form_product['purchase-price'].disabled = !state
+  $form_product['sale-price'].disabled = !state
+  $form_product['btn-submit'].disabled = !state
+  $form_product.reset()
+}
+
 async function showProducts() {
   $overlay.style.display = "block"
   const tableBody = $table_products.querySelector('tbody')
@@ -27,7 +35,7 @@ async function showProducts() {
           <td>${p.purchase_price}</td>
           <td>${p.sale_price}</td>
           <td>
-            <button class="btn btn-primary btn-update" data-id=${p.id} data-name=${p.name} data-purchase_price=${p.purchase_price} data-sale_price=${p.sale_price}>Editar</button>
+            <button class="btn btn-primary btn-update" data-id="${p.id}" data-name="${p.name}" data-purchase_price="${p.purchase_price}" data-sale_price="${p.sale_price}">Editar</button>
             <button class="btn btn-danger btn-delete" data-id=${p.id}>Eliminar</button>
           </td>
         </tr>
@@ -50,7 +58,7 @@ async function sendProduct() {
       const product = new Product(name, purchasePrice, salePrice)
       const response = await insertProduct(product);
       showMsgDialog({ type: 'info', message: 'Product inserted successfully' })
-      $form_product.reset()
+      enableForm(false)
       await showProducts();
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while inserting product: ' + error.message })
@@ -64,7 +72,7 @@ async function sendProduct() {
       updateStatus = false
       updateId = null
       $form_product['btn-submit'].innerText = 'Save'
-      $form_product.reset()
+      enableForm(false)
       await showProducts();
     } catch (error) {
       showMsgDialog({ type: 'error', message: 'An error ocurred while updating product: ' + error.message })
@@ -78,6 +86,7 @@ function setClickEvents() {
     $btn.addEventListener('click', e => {
       const { id, name, purchase_price, sale_price } = e.target.dataset
       updateId = id
+      enableForm(true)
       $form_product['name'].value = name
       $form_product['purchase-price'].value = purchase_price
       $form_product['sale-price'].value = sale_price
@@ -118,6 +127,13 @@ window.addEventListener('load', showProducts)
 $form_product.addEventListener('submit', async e => {
   e.preventDefault()
   await sendProduct()
+})
+
+$form_product['btn-new'].addEventListener('click', () => {
+  enableForm(true)
+  updateStatus = false
+  updateId = null
+  $form_product['btn-submit'].innerText = 'Save'
 })
 
 $form_searchProduct.addEventListener('submit', async e => {
