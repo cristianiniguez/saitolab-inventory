@@ -3,6 +3,7 @@ const moment = require('moment')
 
 const { selectProducts, getProductPrice } = remote.require('./database/product-queries')
 const { selectTransactions, insertTransaction, updateTransaction, deleteTransaction } = remote.require('./database/transaction-queries')
+const { selectAvialableStock } = remote.require('./database/stock-queries')
 
 const Transaction = require('../../models/transaction.model')
 
@@ -17,7 +18,6 @@ const $table_transactions = document.getElementById('table-transactions')
 const $overlay = document.querySelector('.overlay')
 
 // Functions
-
 function enableForm(state) {
   $form_transaction['product'].disabled = !state
   $form_transaction['quantity'].disabled = !state
@@ -35,6 +35,20 @@ async function showProductsList() {
     $form_transaction['product'].innerHTML += products.map(p => `<option value="${p.id}">${p.name}</option>`).join('')
   } catch (error) {
     showMsgDialog({ type: 'error', message: 'An error ocurred while showing products: ' + error.message })
+    console.error(error)
+  }
+}
+
+async function getStock(idProduct) {
+  if (idProduct === '') {
+    $form_transaction['stock'].value = ''
+    return
+  }
+  try {
+    const stock = await selectAvialableStock(idProduct)
+    $form_transaction['stock'].value = stock
+  } catch (error) {
+    showMsgDialog({ type: 'error', message: 'An error ocurred while getting stock: ' + error.message })
     console.error(error)
   }
 }
@@ -106,11 +120,17 @@ async function showTransactions() {
 
 async function sendTransaction() {
   const idProduct = $form_transaction['product'].value
-  const quantity = $form_transaction['quantity'].value
+  const quantity = parseInt($form_transaction['quantity'].value)
   const type = $form_transaction['type'].value
   const date = $form_transaction['date'].value
   if (idProduct === '' || type === '') {
     showMsgDialog({ type: 'warning', message: 'Invalid data' })
+    return
+  }
+  const stock = parseInt($form_transaction['stock'].value)
+  if (type === 'sale' && quantity > stock) {
+    showMsgDialog({ type: 'warning', message: 'Sale quantity cannot be more than avialable stock' })
+    $form_transaction['quantity'].focus()
     return
   }
   if (!updateStatus) {
@@ -185,7 +205,10 @@ window.addEventListener('load', async () => {
   await showTransactions()
 })
 
-$form_transaction['product'].addEventListener('change', getAmount)
+$form_transaction['product'].addEventListener('change', () => {
+  getStock($form_transaction['product'].value)
+  getAmount()
+})
 $form_transaction['quantity'].addEventListener('change', getAmount)
 $form_transaction['type'].addEventListener('change', getAmount)
 
