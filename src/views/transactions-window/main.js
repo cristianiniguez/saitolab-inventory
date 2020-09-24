@@ -127,13 +127,18 @@ async function sendTransaction() {
     showMsgDialog({ type: 'warning', message: 'Invalid data' })
     return
   }
-  const stock = parseInt($form_transaction['stock'].value)
-  if (type === 'sale' && quantity > stock) {
-    showMsgDialog({ type: 'warning', message: 'Sale quantity cannot be more than avialable stock' })
-    $form_transaction['quantity'].focus()
+  if (moment($form_transaction['date'].value).diff(moment().format('yyyy-MM-DD')) > 0) {
+    showMsgDialog({ type: 'warning', message: 'Invalid future date' })
+    $form_transaction['date'].focus()
     return
   }
   if (!updateStatus) {
+    const stock = parseInt($form_transaction['stock'].value)
+    if (type === 'sale' && quantity > stock) {
+      showMsgDialog({ type: 'warning', message: 'Sale quantity cannot be more than avialable stock' })
+      $form_transaction['quantity'].focus()
+      return
+    }
     try {
       const transaction = new Transaction(idProduct, quantity, type, date)
       const response = await insertTransaction(transaction)
