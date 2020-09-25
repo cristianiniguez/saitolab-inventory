@@ -18,10 +18,7 @@
     "node",
     "electron"
   ],
-  "author": {
-    "name": "cristianiniguez",
-    "email": "felizpc1@gmail.com"
-  },
+  "author": "cristianiniguez <felizpc1@gmail.com>",
   "license": "MIT",
   "config": {
     "forge": {
@@ -63,5 +60,13 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.53",
     "@electron-forge/maker-zip": "^6.0.0-beta.53",
     "electron": "10.1.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristianiniguez/saitolab-inventory.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cristianiniguez/saitolab-inventory/issues"
+  },
+  "homepage": "https://github.com/cristianiniguez/saitolab-inventory#readme"
 }
