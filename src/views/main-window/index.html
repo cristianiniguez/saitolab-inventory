@@ -12,68 +12,55 @@
 <body>
   <header>
     <nav class="navbar navbar-dark bg-primary">
-      <span class="navbar-brand mb-0 h1">SaitoLab Inventory Management System</span>
+      <h1 class="navbar-brand mb-0">SaitoLab Inventory Management System</h1>
     </nav>
   </header>
   <main>
     <div class="container-fluid h-100">
       <div class="row h-100">
-        <div class="col-4 bg-light border-right p-4">
-          <div class="row">
-            <div class="col-6">
-              <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                  <h4 class="card-title">0</h4>
-                  <p class="card-text">Purchase</p>
-                </div>
+        <div class="col-md-3 bg-light border-right px-0 py-4">
+          <div class="h5">
+            <div class="bg-primary text-white p-4 ">
+              <div class="row align-items-end">
+                <div class="col-md-6"><strong>Purchases</strong></div>
+                <div class="col-md-6 text-right"><strong>0</strong></div>
               </div>
             </div>
-            <div class="col-6">
-              <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                  <h4 class="card-title">0</h4>
-                  <p class="card-text">Sale</p>
-                </div>
+            <div class="bg-primary text-white p-4 ">
+              <div class="row align-items-end">
+                <div class="col-md-6"><strong>Sales</strong></div>
+                <div class="col-md-6 text-right"><strong>0</strong></div>
               </div>
             </div>
-            <div class="col-12">
-              <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                  <h4 class="card-title">0</h4>
-                  <p class="card-text">Profit</p>
-                </div>
+            <div class="bg-primary text-white p-4 ">
+              <div class="row align-items-end">
+                <div class="col-md-6"><strong>Profit</strong></div>
+                <div class="col-md-6 text-right"><strong>0</strong></div>
               </div>
             </div>
-            <div class="col-6">
-              <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                  <h4 class="card-title">0</h4>
-                  <p class="card-text">Stock</p>
-                </div>
+            <div class="bg-primary text-white p-4 ">
+              <div class="row align-items-end">
+                <div class="col-md-6"><strong>Stock</strong></div>
+                <div class="col-md-6 text-right"><strong>0</strong></div>
               </div>
             </div>
-            <div class="col-6">
-              <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                  <h4 class="card-title">0</h4>
-                  <p class="card-text">Inventory</p>
-                </div>
+            <div class="bg-primary text-white p-4 ">
+              <div class="row align-items-end">
+                <div class="col-md-6"><strong>Stock Value</strong></div>
+                <div class="col-md-6 text-right"><strong>0</strong></div>
               </div>
             </div>
           </div>
+          <div class="form-group m-4">
+            <button type="button" class="btn btn-success btn-block" id="products-window">View Products</button>
+            <button type="button" class="btn btn-warning btn-block" id="transactions-window">View Transactions</button>
+          </div>
         </div>
-        <div class="col-6 p-4">
-          <h1>Avialable Stock</h1>
-          <form id="dates-form">
-            <div class="form-group">
-              <label>Start Date <input type="date" name="start-date" id="start-date" required></label>
-              <label>End Date <input type="date" name="end-date" id="end-date" required></label>
-              <label>Product Name<input type="text" required></label>
-              <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-            <div class="form-group">
-              <button type="button" class="btn btn-success" id="products-window">View Products</button>
-              <button type="button" class="btn btn-warning" id="transactions-window">View Transactions</button>
+        <div class="col-md-9 p-4">
+          <form id="form-stock">
+            <div class="form-group input-group">
+              <input type="text" id="input-search-product" class="form-control" placeholder="Product Name">
+              <button id="btn-search-product" class="btn btn-primary">Search</button>
             </div>
           </form>
           <table class="table table-bordered table-hover">
