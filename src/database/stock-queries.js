@@ -1,15 +1,15 @@
 const getConnection = require('./connection')
 
 async function selectStock(productName) {
-  // const query = ``
-  // try {
-  //   const connection = await getConnection()
-  //   const response = await connection.query(query)
-  //   return response
-  // } catch (error) {
-  //   console.error(error.message)
-  //   throw error
-  // }
+  const query = `SELECT name, purchases_value, sales_value, stock, value FROM stock_view WHERE name LIKE '%${productName}%';`
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query)
+    return response
+  } catch (error) {
+    console.error(error.message)
+    throw error
+  }
 }
 
 async function selectAvialableStock(idProduct) {
