@@ -1,8 +1,10 @@
 const { ipcRenderer, remote } = require('electron')
 
-const { selectStock } = remote.require('./database/stock-queries')
+const { selectStock, selectStockValues } = remote.require('./database/stock-queries')
 
 // Elements
+const $stockCards = document.getElementById('stock-cards')
+
 const $btn_productsWindow = document.getElementById('products-window')
 const $btn_transactionsWindow = document.getElementById('transactions-window')
 
@@ -17,7 +19,6 @@ async function showStock() {
   tableBody.innerHTML = ''
   try {
     const stock = await selectStock($form_stock['input-search-product'].value)
-    console.log(stock)
     tableBody.innerHTML = stock.map(st => `
       <tr>
         <td>${st.name}</td>
@@ -35,12 +36,29 @@ async function showStock() {
   }
 }
 
+async function showStockValues() {
+  try {
+    const stockValues = await selectStockValues()
+    console.log(stockValues)
+    $stockCards.querySelector('#purchases').innerText = stockValues.purchases
+    $stockCards.querySelector('#sales').innerText = stockValues.sales
+    $stockCards.querySelector('#profit').innerText = stockValues.profit
+    $stockCards.querySelector('#value').innerText = stockValues.value
+  } catch (error) {
+    showMsgDialog({ type: 'error', message: 'An error ocurred while showing stock values: ' + error.message })
+    console.error(error)
+  }
+}
+
 function showMsgDialog(options) {
   ipcRenderer.send('show-msg-dialog', { win: 'mainWindow', ...options })
 }
 
 // Events
-window.addEventListener('load', showStock)
+window.addEventListener('load', async () => {
+  await showStock()
+  await showStockValues()
+})
 
 $btn_productsWindow.addEventListener('click', () => {
   ipcRenderer.send('open-window', 'products')

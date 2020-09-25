@@ -12,6 +12,24 @@ async function selectStock(productName) {
   }
 }
 
+async function selectStockValues() {
+  const query = `
+    SELECT SUM(purchases_value) AS purchases,
+    SUM(sales_value) AS sales,
+    SUM(profit) AS profit,
+    SUM(value) AS value
+    from stock_view;
+  `
+  try {
+    const connection = await getConnection()
+    const response = await connection.query(query)
+    return response[0]
+  } catch (error) {
+    console.error(error.message)
+    throw error
+  }
+}
+
 async function selectAvialableStock(idProduct) {
   const query = `
     SELECT id_product,
@@ -32,5 +50,6 @@ async function selectAvialableStock(idProduct) {
 
 module.exports = {
   selectStock,
+  selectStockValues,
   selectAvialableStock
 }
