@@ -23,9 +23,12 @@
             <div class="row form-group">
               <label class="col-4" for="product">Product</label>
               <div class="col-8">
-                <select id="product" class="form-control" disabled>
+                <input type="text" id="product" class="form-control" list="products-list" disabled>
+                <datalist id="products-list">
                   <option value=""></option>
-                </select>
+                </datalist>
+                <!-- <select id="product" class="form-control" disabled>
+                </select> -->
               </div>
             </div>
             <div class="row form-group">

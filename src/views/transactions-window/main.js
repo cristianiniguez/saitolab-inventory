@@ -29,10 +29,11 @@ function enableForm(state) {
 }
 
 async function showProductsList() {
+  $form_productsList = $form_transaction.querySelector('datalist')
   try {
-    $form_transaction['product'].innerHTML = '<option value=""></option>'
+    $form_productsList.innerHTML = '<option value=""></option>'
     const products = await selectProducts('')
-    $form_transaction['product'].innerHTML += products.map(p => `<option value="${p.id}">${p.name}</option>`).join('')
+    $form_productsList.innerHTML += products.map(p => `<option value="${p.id}">${p.name}</option>`).join('')
   } catch (error) {
     showMsgDialog({ type: 'error', message: 'An error ocurred while showing products: ' + error.message })
     console.error(error)
