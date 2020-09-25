@@ -8,8 +8,8 @@ let windows = {
 }
 
 const startWindowOptions = {
-  width: 800,
-  height: 600,
+  width: 1500,
+  height: 1200,
   webPreferences: {
     nodeIntegration: true,
     enableRemoteModule: true
@@ -18,17 +18,18 @@ const startWindowOptions = {
 
 const createMainWindow = () => {
   windows.mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 900,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
     },
+    show: false
   })
   windows.mainWindow.loadFile(path.join(__dirname, 'views', 'main-window', 'index.html'));
   windows.mainWindow.on('close', () => {
     app.quit()
   })
+  windows.mainWindow.maximize()
+  windows.mainWindow.show()
 }
 
 const createProductsWindow = () => {
