@@ -1,25 +1,24 @@
-require('dotenv').config()
+const mysql = require('promise-mysql');
+const config = require('../config');
 
-const mysql = require('promise-mysql')
-
-let connection = null
+let connection = null;
 
 async function getConnection() {
   try {
     if (!connection) {
       connection = await mysql.createConnection({
-        host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || '',
-        database: process.env.DB_NAME
-      })
-      console.log('Connected succesfully to MySQL')
+        host: config.MYSQL_HOST,
+        user: config.MYSQL_USER,
+        password: config.MYSQL_PASSWORD,
+        database: config.MYSQL_DB_NAME,
+      });
+      console.log('Connected succesfully to MySQL');
     }
-    return connection
+    return connection;
   } catch (error) {
-    console.error(error)
-    throw error
+    console.error(error);
+    throw error;
   }
 }
 
-module.exports = getConnection
+module.exports = getConnection;
